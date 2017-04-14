@@ -24,7 +24,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 //        String query = "SELECT * FROM clients ORDER BY company_name ASC"; // No trailing ';'
 //        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
 
-
+        getLoaderManager().initLoader(0,null,this);
         String [] mapFrom = new String[]
                 {
                         DBHelper.COLUMN_MAKE,
