@@ -4,12 +4,14 @@ import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -24,6 +26,18 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ListView phoneList = (ListView)findViewById(android.R.id.list);
+
+        phoneList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
+            {
+                Intent intent = new Intent(MainActivity.this, EditPhoneActivity.class);
+                intent.putExtra("id", (int) id);
+                startActivity(intent);
+            }
+        });
 
 //        String query = "SELECT * FROM clients ORDER BY company_name ASC"; // No trailing ';'
 //        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
@@ -78,19 +92,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 
     public void addPhone(View view)
     {
-        Random random = new Random();
-        DBHelper dbHelper = new DBHelper(this);
-        SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
-        ContentValues wartosci = new ContentValues();
-        wartosci.put(dbHelper.COLUMN_MODEL,"Z2");
-        wartosci.put(dbHelper.COLUMN_MAKE,"SONY");
-        wartosci.put(dbHelper.COLUMN_WWW, "wp.pl");
-        database.insert(dbHelper.TABLE_NAME, null, wartosci);
-        database.close();
-
-        //odświeżamy bieżącą aktywność
-        finish();
-        startActivity(getIntent());
+        Intent intent = new Intent(this, AddPhoneActivity.class);
+        startActivity(intent);
     }
 
 }

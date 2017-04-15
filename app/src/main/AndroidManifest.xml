@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="rafal.maksim.druga">
+          package="rafal.maksim.druga">
 
     <application
         android:allowBackup="true"
@@ -10,19 +10,20 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".EditPhoneActivity"></activity>
+        <activity android:name=".EditPhoneActivity"/>
 
         <provider
-            android:authorities="rafal.maksim.druga.Provider"
-            android:name="rafal.maksim.druga.Provider">
-
+            android:name=".Provider"
+            android:authorities="rafal.maksim.druga.Provider">
         </provider>
 
+        <activity android:name=".AddPhoneActivity">
+        </activity>
     </application>
 
 </manifest>
