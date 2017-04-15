@@ -16,7 +16,7 @@ public class DBHelper extends SQLiteOpenHelper
     public final static String COLUMN_MODEL = "Model";
     public final static String COLUMN_WWW = "WWW";
     public final static String TABLE_NAME = "Phones";
-    public final static String CREATE_DB_QUERY = "CREATE TABLE  "+ TABLE_NAME + "(" + ID + " integer primary key autoincrement, "
+    public final static String CREATE_DB_QUERY = "CREATE TABLE "+ TABLE_NAME + " (" + ID + " integer primary key autoincrement, "
             + COLUMN_MAKE + " text not null, " + COLUMN_MODEL + " text, " + COLUMN_WWW+" text);";
 
     public final static String DROP_DB_QUERY = "DROP TABLE " + TABLE_NAME ;
