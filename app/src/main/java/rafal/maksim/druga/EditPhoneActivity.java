@@ -87,4 +87,15 @@ public class EditPhoneActivity extends AppCompatActivity {
         Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(url));
         startActivity(intent);
     }
+
+    public void deletePhone(View view)
+    {
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
+
+        database.delete(dbHelper.TABLE_NAME, dbHelper.ID + " = " + currentPhoneId, null);
+
+        Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
+        startActivity(intent);
+    }
 }

@@ -10,7 +10,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -36,6 +41,42 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
                 Intent intent = new Intent(MainActivity.this, EditPhoneActivity.class);
                 intent.putExtra("id", (int) id);
                 startActivity(intent);
+            }
+        });
+
+        phoneList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        phoneList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener()
+        {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b)
+            {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
+            {
+                MenuInflater pomka = actionMode.getMenuInflater();
+                pomka.inflate(R.layout.toolbar, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu)
+            {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
+            {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode)
+            {
+
             }
         });
 
