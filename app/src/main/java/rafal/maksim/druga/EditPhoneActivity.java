@@ -26,18 +26,19 @@ public class EditPhoneActivity extends AppCompatActivity {
         modelEditText = ((EditText)findViewById(R.id.modelEditLabel));
         websiteEditText = ((EditText)findViewById(R.id.websiteEditLabel));
 
-
+        //próbujemy odczytać dane przekazane z aktywnoći Main
         try
-        {
+        {   //jeśli się powiodło - przypisujemy zmiennej currentPhoneId id edytowanego telefonu
             Intent intent = getIntent();
             currentPhoneId = intent.getIntExtra("id", -1); //-1 to wartość domyślna
         }
         catch(Exception ex)
         {
+            //jeśli nie udalo się odczytać wartości - wyświetlamy stosowny komunikat
             Toast.makeText(this,"Błąd podczas przekazania wartości z poprzedniego okna!" + ex.getMessage(), Toast.LENGTH_LONG);
         }
 
-
+        //dodatkowe zabezpieczenie - w przypadku gdy blok try catch nie złapał wyjątku, ale id telefonu jest niepoprawne. Wyświetlamy wówczas stosowny komunikat
         if(-1 == currentPhoneId)
         {
             Toast.makeText(this,"Błąd podczas przekazania wartości z poprzedniego okna!" , Toast.LENGTH_LONG);
@@ -45,13 +46,16 @@ public class EditPhoneActivity extends AppCompatActivity {
         }
 
         DBHelper dbHelper = new DBHelper(this);
-        SQLiteDatabase database = dbHelper.getReadableDatabase(); //baza w trybie tylko do odczytu
-        Cursor cursor = getContentResolver().query(Provider.URI_CONTENT, new String[]{dbHelper.COLUMN_MAKE, dbHelper.COLUMN_MODEL, dbHelper.COLUMN_WWW}, "_id = " + currentPhoneId, null, null);
-        cursor.moveToFirst();
+        SQLiteDatabase database = dbHelper.getReadableDatabase(); //otwieramy bazę w trybie tylko do odczytu
+        Cursor cursor = getContentResolver().query(Provider.URI_CONTENT, new String[]{dbHelper.COLUMN_MAKE, dbHelper.COLUMN_MODEL, dbHelper.COLUMN_WWW}, "_id = " + currentPhoneId, null, null); //pobieramy z bazy dane edytowanego telefonu
+        cursor.moveToFirst(); //przechodzimy do pierwszego wiersza zwróconego wyniku
+
+        //--------- wyłuskujemy dane telefonu (model, marka, strona www) z obiektu cursor i wyświetlamy je w odpowiednich polach -----------
         makeEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(dbHelper.COLUMN_MAKE)));
         modelEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(dbHelper.COLUMN_MODEL)));
         websiteEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(dbHelper.COLUMN_WWW)));
-        database.close();
+        //----------------------------------------------------------------------------------------------------------------------------
+        database.close();//zamykamy połączenie z bazą
 
     }
 
@@ -65,35 +69,38 @@ public class EditPhoneActivity extends AppCompatActivity {
         String model = ((EditText)findViewById(R.id.modelEditLabel)).getText().toString();
         String website = ((EditText)findViewById(R.id.websiteEditLabel)).getText().toString();
 
+        // ------- zapiujemy wprowadzone dane na liście ----------------------
         values.put(dbHelper.COLUMN_MODEL, model);
         values.put(dbHelper.COLUMN_MAKE,make);
         values.put(dbHelper.COLUMN_WWW, website);
 //        Provider provider = new Provider();
 //        provider.update(Provider.URI_CONTENT,values,null,null);
         //getContentResolver().update(ContentUris.withAppendedId(Provider.URI_CONTENT, currentPhoneId),values,null,null); //Karol
-        database.update(dbHelper.TABLE_NAME, values, dbHelper.ID + " = " + currentPhoneId, null);
-        database.close();
+        database.update(dbHelper.TABLE_NAME, values, dbHelper.ID + " = " + currentPhoneId, null); //aktuallizujemy dane bieżącego telefonu w bazie danych
+        database.close(); //zaykamy połączenie z bazą danych
 
         Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
         startActivity(intent);
     }
 
+    //metoda otwierająca okno przeglądarki i wyświetla adres strony danego telefonu
     public void openBrowser(View view)
     {
         String url = websiteEditText.getText().toString();
-        if (!url.startsWith("http://") && !url.startsWith("https://"))
+        if (!url.startsWith("http://") && !url.startsWith("https://")) //jeśli adres nie zaczyna sie od frazy http:// lub https:// - dodajemy ją na początku
             url = "http://" + url;
 
-        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(url));
-        startActivity(intent);
+        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(url)); //tworzymy intent przeglądarki
+        startActivity(intent); //w tym miejscu uruchamia sie przeglądarka
     }
 
+    //metoda usuwająca telefon z bazy
     public void deletePhone(View view)
     {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
 
-        database.delete(dbHelper.TABLE_NAME, dbHelper.ID + " = " + currentPhoneId, null);
+        database.delete(dbHelper.TABLE_NAME, dbHelper.ID + " = " + currentPhoneId, null); //usuwamy z bazy telefon o podanym id
 
         Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
         startActivity(intent);

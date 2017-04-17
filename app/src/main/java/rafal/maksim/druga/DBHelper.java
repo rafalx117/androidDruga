@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper
 {
+    // -------------- definiujemy podstawowe informacje ---------------------------------
     private Context context;
     public static final String DB_NAME = "RafalSQL";
     public final static String ID= "_id";
@@ -18,8 +19,8 @@ public class DBHelper extends SQLiteOpenHelper
     public final static String TABLE_NAME = "Phones";
     public final static String CREATE_DB_QUERY = "CREATE TABLE "+ TABLE_NAME + " (" + ID + " integer primary key autoincrement, "
             + COLUMN_MAKE + " text not null, " + COLUMN_MODEL + " text, " + COLUMN_WWW+" text);";
-
     public final static String DROP_DB_QUERY = "DROP TABLE " + TABLE_NAME ;
+    //-----------------------------------------------------------------------------------
 
     public DBHelper(Context context)
     {
@@ -29,13 +30,13 @@ public class DBHelper extends SQLiteOpenHelper
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_DB_QUERY);
+        db.execSQL(CREATE_DB_QUERY);//wykonujemy query odpowiedzialne za utworzenie tabeli w bazie danych
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(DROP_DB_QUERY);
-        onCreate(db);
+        db.execSQL(DROP_DB_QUERY);  //kasujemy tabelę
+        onCreate(db);   //tworzymy tabelę
     }
 
 }

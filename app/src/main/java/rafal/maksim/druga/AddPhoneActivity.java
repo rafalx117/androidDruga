@@ -29,19 +29,21 @@ public class AddPhoneActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_phone);
+
         makeEditText = ((EditText)findViewById(R.id.makeAddLabel));
         modelEditText =  ((EditText)findViewById(R.id.modelAddLabel));
         websiteEditText = ((EditText)findViewById(R.id.websiteAddLabel));
         autogenerateWebsiteSwitch = ((Switch)findViewById(R.id.autogenerateWebsiteSwitch) );
 
+        /* metoda wygeneruje adres strony internetowej, jeśli włączymy switch który był wcześniej wyłączony oraz jeśli chociaż jedno pole do wprowadzania nie jest puste  */
         autogenerateWebsiteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b)
             {
-                if(((Switch)findViewById(R.id.autogenerateWebsiteSwitch)).isChecked() //metoda wygeneruje stronę internetową, jeśli zaznaczymy switch który był wcześniej wyłączony
+                if(((Switch)findViewById(R.id.autogenerateWebsiteSwitch)).isChecked()
                         && !makeEditText.getText().toString().isEmpty()
-                        && !modelEditText.getText().toString().isEmpty()) //jeśli zaznaczona jest opccja autogeneracji adresu - generujemy adres
+                        && !modelEditText.getText().toString().isEmpty())
                 {
                     websiteEditText.setText(generateWWWAddress());
                 }
@@ -49,6 +51,7 @@ public class AddPhoneActivity extends AppCompatActivity
             }
         });
 
+        // jeśli tekst w labelce makeEditText się zmienia - generujemy adres strony www
         makeEditText.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -72,6 +75,7 @@ public class AddPhoneActivity extends AppCompatActivity
             }
         });
 
+        // jeśli tekst w labelce modelEditLabel się zmienia - generujemy adres strony www
         modelEditText.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -108,7 +112,7 @@ public class AddPhoneActivity extends AppCompatActivity
     {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
-        ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues(); //tworzymy listę wartości, które chcemy dodać do bazy
 
         String make = ((EditText)findViewById(R.id.makeAddLabel)).getText().toString();
         String model = ((EditText)findViewById(R.id.modelAddLabel)).getText().toString();
