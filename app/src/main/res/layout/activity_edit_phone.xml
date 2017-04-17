@@ -11,39 +11,44 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:shrinkColumns="*"
     android:stretchColumns="2"
-    tools:context=".EditPhoneActivity" >
+    tools:context=".EditPhoneActivity">
 
     <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Producent"/>
+
         <EditText
             android:id="@+id/makeEditLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_span="2" >
-            </EditText>
+            android:layout_span="2">
+        </EditText>
     </TableRow>
     />
+
     <TableRow
         android:id="@+id/tableRow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Model" />
+            android:text="Model"/>
+
         <EditText
             android:id="@+id/modelEditLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_span="2" />
+            android:layout_span="2"/>
 
     </TableRow>
 
@@ -66,6 +71,7 @@
     </TableRow>
 
     <TableRow>
+
         <Button
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
@@ -76,16 +82,18 @@
     </TableRow>
 
     <TableRow>
-    <Button
-        android:id="@+id/goToWebsiteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Przejdź do strony WWW"
-        android:layout_span="3"
-        android:onClick="openBrowser"/>
+
+        <Button
+            android:id="@+id/goToWebsiteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Przejdź do strony WWW"
+            android:layout_span="3"
+            android:onClick="openBrowser"/>
     </TableRow>
 
     <TableRow>
+
         <Button
             android:id="@+id/deleteButton"
             android:layout_width="wrap_content"

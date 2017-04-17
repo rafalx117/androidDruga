@@ -3,23 +3,20 @@ package rafal.maksim.druga;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import java.util.Random;
-
 public class AddPhoneActivity extends AppCompatActivity
 {
 
-    EditText makeEditText ;
+    EditText makeEditText;
     EditText modelEditText;
     EditText websiteEditText;
     Switch autogenerateWebsiteSwitch;
@@ -31,10 +28,10 @@ public class AddPhoneActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_phone);
 
-        makeEditText = ((EditText)findViewById(R.id.makeAddLabel));
-        modelEditText =  ((EditText)findViewById(R.id.modelAddLabel));
-        websiteEditText = ((EditText)findViewById(R.id.websiteAddLabel));
-        autogenerateWebsiteSwitch = ((Switch)findViewById(R.id.autogenerateWebsiteSwitch) );
+        makeEditText = ((EditText) findViewById(R.id.makeAddLabel));
+        modelEditText = ((EditText) findViewById(R.id.modelAddLabel));
+        websiteEditText = ((EditText) findViewById(R.id.websiteAddLabel));
+        autogenerateWebsiteSwitch = ((Switch) findViewById(R.id.autogenerateWebsiteSwitch));
 
         /* metoda wygeneruje adres strony internetowej, jeśli włączymy switch który był wcześniej wyłączony oraz jeśli chociaż jedno pole do wprowadzania nie jest puste  */
         autogenerateWebsiteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -42,7 +39,7 @@ public class AddPhoneActivity extends AppCompatActivity
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b)
             {
-                if(((Switch)findViewById(R.id.autogenerateWebsiteSwitch)).isChecked()
+                if (((Switch) findViewById(R.id.autogenerateWebsiteSwitch)).isChecked()
                         && !makeEditText.getText().toString().isEmpty()
                         && !modelEditText.getText().toString().isEmpty())
                 {
@@ -64,7 +61,7 @@ public class AddPhoneActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-                if(((Switch)findViewById(R.id.autogenerateWebsiteSwitch)).isChecked())
+                if (((Switch) findViewById(R.id.autogenerateWebsiteSwitch)).isChecked())
                     websiteEditText.setText(generateWWWAddress());
 
             }
@@ -88,7 +85,7 @@ public class AddPhoneActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-                if(((Switch)findViewById(R.id.autogenerateWebsiteSwitch)).isChecked())
+                if (((Switch) findViewById(R.id.autogenerateWebsiteSwitch)).isChecked())
                     websiteEditText.setText(generateWWWAddress());
             }
 
@@ -102,40 +99,39 @@ public class AddPhoneActivity extends AppCompatActivity
     }
 
     //metoda generująca link do wyszukiwania danego telefonu w google
-    public  String generateWWWAddress()
+    public String generateWWWAddress()
     {
-        String make = ((EditText)findViewById(R.id.makeAddLabel)).getText().toString();
-        String model = ((EditText)findViewById(R.id.modelAddLabel)).getText().toString();
-        return "https://www.google.pl/search?&q="+make+"+"+ model;
+        String make = ((EditText) findViewById(R.id.makeAddLabel)).getText().toString();
+        String model = ((EditText) findViewById(R.id.modelAddLabel)).getText().toString();
+        return "https://www.google.pl/search?&q=" + make + "+" + model;
     }
 
     public void savePhone(View view)
     {
-            // ---------------- Prosta walidacja wprowadzonych danych -----------------------------------------
-           if(makeEditText.getText().toString().isEmpty() || makeEditText.getText().toString() == null)
-           {
-               Toast toast = Toast.makeText(this,"Pole 'Producent' nie może być puste!", Toast.LENGTH_SHORT);
-               toast.show();
-               return;
-           }
-           else if (modelEditText.getText().toString().isEmpty() || modelEditText.getText().toString() == null)
-           {
-               Toast toast = Toast.makeText(this,"Pole 'Model' nie może być puste!", Toast.LENGTH_SHORT);
-               toast.show();
-               return;
-           }
-            //--------------------------------------------------------------------------------------------------
+        // ---------------- Prosta walidacja wprowadzonych danych -----------------------------------------
+        if (makeEditText.getText().toString().isEmpty() || makeEditText.getText().toString() == null)
+        {
+            Toast toast = Toast.makeText(this, "Pole 'Producent' nie może być puste!", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        } else if (modelEditText.getText().toString().isEmpty() || modelEditText.getText().toString() == null)
+        {
+            Toast toast = Toast.makeText(this, "Pole 'Model' nie może być puste!", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        //--------------------------------------------------------------------------------------------------
 
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
         ContentValues values = new ContentValues(); //tworzymy listę wartości, które chcemy dodać do bazy
 
-        String make = ((EditText)findViewById(R.id.makeAddLabel)).getText().toString();
-        String model = ((EditText)findViewById(R.id.modelAddLabel)).getText().toString();
-        String website = ((EditText)findViewById(R.id.websiteAddLabel)).getText().toString();
+        String make = ((EditText) findViewById(R.id.makeAddLabel)).getText().toString();
+        String model = ((EditText) findViewById(R.id.modelAddLabel)).getText().toString();
+        String website = ((EditText) findViewById(R.id.websiteAddLabel)).getText().toString();
 
         values.put(dbHelper.COLUMN_MODEL, model);
-        values.put(dbHelper.COLUMN_MAKE,make);
+        values.put(dbHelper.COLUMN_MAKE, make);
         values.put(dbHelper.COLUMN_WWW, website);
         database.insert(dbHelper.TABLE_NAME, null, values);
         database.close();

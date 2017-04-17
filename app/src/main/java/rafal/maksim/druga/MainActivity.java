@@ -30,7 +30,6 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         phoneList = (ListView) findViewById(android.R.id.list);
 
         //definniujemy listenet dla kliknięcia na dany element listy
@@ -183,7 +182,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         //jesli przycisk dodający telefon został naciśniety - przechodzimy do aktywności AddPhoneActivity
         switch (item.getItemId())
         {
-            case R.id.addPhone:
+            case R.id.addition:
                 Intent zamiar = new Intent(MainActivity.this, AddPhoneActivity.class);
                 startActivity(zamiar);
         }

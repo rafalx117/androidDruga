@@ -1,47 +1,47 @@
 package rafal.maksim.druga;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class EditPhoneActivity extends AppCompatActivity {
+public class EditPhoneActivity extends AppCompatActivity
+{
 
     EditText modelEditText, makeEditText, websiteEditText;
     int currentPhoneId = -1;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_phone);
 
-        makeEditText = ((EditText)findViewById(R.id.makeEditLabel));
-        modelEditText = ((EditText)findViewById(R.id.modelEditLabel));
-        websiteEditText = ((EditText)findViewById(R.id.websiteEditLabel));
+        makeEditText = ((EditText) findViewById(R.id.makeEditLabel));
+        modelEditText = ((EditText) findViewById(R.id.modelEditLabel));
+        websiteEditText = ((EditText) findViewById(R.id.websiteEditLabel));
 
         //próbujemy odczytać dane przekazane z aktywnoći Main
         try
         {   //jeśli się powiodło - przypisujemy zmiennej currentPhoneId id edytowanego telefonu
             Intent intent = getIntent();
             currentPhoneId = intent.getIntExtra("id", -1); //-1 to wartość domyślna
-        }
-        catch(Exception ex)
+        } catch (Exception ex)
         {
             //jeśli nie udalo się odczytać wartości - wyświetlamy stosowny komunikat
-            Toast.makeText(this,"Błąd podczas przekazania wartości z poprzedniego okna!" + ex.getMessage(), Toast.LENGTH_LONG);
+            Toast.makeText(this, "Błąd podczas przekazania wartości z poprzedniego okna!" + ex.getMessage(), Toast.LENGTH_LONG);
         }
 
         //dodatkowe zabezpieczenie - w przypadku gdy blok try catch nie złapał wyjątku, ale id telefonu jest niepoprawne. Wyświetlamy wówczas stosowny komunikat
-        if(-1 == currentPhoneId)
+        if (-1 == currentPhoneId)
         {
-            Toast.makeText(this,"Błąd podczas przekazania wartości z poprzedniego okna!" , Toast.LENGTH_LONG);
+            Toast.makeText(this, "Błąd podczas przekazania wartości z poprzedniego okna!", Toast.LENGTH_LONG);
             return;
         }
 
@@ -65,20 +65,19 @@ public class EditPhoneActivity extends AppCompatActivity {
         SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
         ContentValues values = new ContentValues();
 
-        String make = ((EditText)findViewById(R.id.makeEditLabel)).getText().toString();
-        String model = ((EditText)findViewById(R.id.modelEditLabel)).getText().toString();
-        String website = ((EditText)findViewById(R.id.websiteEditLabel)).getText().toString();
+        String make = ((EditText) findViewById(R.id.makeEditLabel)).getText().toString();
+        String model = ((EditText) findViewById(R.id.modelEditLabel)).getText().toString();
+        String website = ((EditText) findViewById(R.id.websiteEditLabel)).getText().toString();
 
         // ---------------- Prosta walidacja wprowadzonych danych -----------------------------------------
-        if(makeEditText.getText().toString().isEmpty() || makeEditText.getText().toString() == null)
+        if (makeEditText.getText().toString().isEmpty() || makeEditText.getText().toString() == null)
         {
-            Toast toast = Toast.makeText(this,"Pole 'Producent' nie może być puste!", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, "Pole 'Producent' nie może być puste!", Toast.LENGTH_SHORT);
             toast.show();
             return;
-        }
-        else if (modelEditText.getText().toString().isEmpty() || modelEditText.getText().toString() == null)
+        } else if (modelEditText.getText().toString().isEmpty() || modelEditText.getText().toString() == null)
         {
-            Toast toast = Toast.makeText(this,"Pole 'Model' nie może być puste!", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, "Pole 'Model' nie może być puste!", Toast.LENGTH_SHORT);
             toast.show();
             return;
         }
@@ -87,11 +86,14 @@ public class EditPhoneActivity extends AppCompatActivity {
 
         // ------- zapiujemy wprowadzone dane na liście ----------------------
         values.put(dbHelper.COLUMN_MODEL, model);
-        values.put(dbHelper.COLUMN_MAKE,make);
+        values.put(dbHelper.COLUMN_MAKE, make);
         values.put(dbHelper.COLUMN_WWW, website);
+
 //        Provider provider = new Provider();
-//        provider.update(Provider.URI_CONTENT,values,null,null);
+//        provider.update(Provider.URI_CONTENT,values,null,null); //todo: nie działa
         //getContentResolver().update(ContentUris.withAppendedId(Provider.URI_CONTENT, currentPhoneId),values,null,null); //Karol
+
+
         database.update(dbHelper.TABLE_NAME, values, dbHelper.ID + " = " + currentPhoneId, null); //aktuallizujemy dane bieżącego telefonu w bazie danych
         database.close(); //zaykamy połączenie z bazą danych
 
