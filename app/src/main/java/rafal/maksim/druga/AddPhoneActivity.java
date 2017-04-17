@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -110,6 +111,21 @@ public class AddPhoneActivity extends AppCompatActivity
 
     public void savePhone(View view)
     {
+            // ---------------- Prosta walidacja wprowadzonych danych -----------------------------------------
+           if(makeEditText.getText().toString().isEmpty() || makeEditText.getText().toString() == null)
+           {
+               Toast toast = Toast.makeText(this,"Pole 'Producent' nie może być puste!", Toast.LENGTH_SHORT);
+               toast.show();
+               return;
+           }
+           else if (modelEditText.getText().toString().isEmpty() || modelEditText.getText().toString() == null)
+           {
+               Toast toast = Toast.makeText(this,"Pole 'Model' nie może być puste!", Toast.LENGTH_SHORT);
+               toast.show();
+               return;
+           }
+            //--------------------------------------------------------------------------------------------------
+
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
         ContentValues values = new ContentValues(); //tworzymy listę wartości, które chcemy dodać do bazy
@@ -127,4 +143,6 @@ public class AddPhoneActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
         startActivity(intent);
     }
+
+
 }

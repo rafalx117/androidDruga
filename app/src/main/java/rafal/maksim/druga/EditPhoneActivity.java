@@ -69,6 +69,22 @@ public class EditPhoneActivity extends AppCompatActivity {
         String model = ((EditText)findViewById(R.id.modelEditLabel)).getText().toString();
         String website = ((EditText)findViewById(R.id.websiteEditLabel)).getText().toString();
 
+        // ---------------- Prosta walidacja wprowadzonych danych -----------------------------------------
+        if(makeEditText.getText().toString().isEmpty() || makeEditText.getText().toString() == null)
+        {
+            Toast toast = Toast.makeText(this,"Pole 'Producent' nie może być puste!", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        else if (modelEditText.getText().toString().isEmpty() || modelEditText.getText().toString() == null)
+        {
+            Toast toast = Toast.makeText(this,"Pole 'Model' nie może być puste!", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        //--------------------------------------------------------------------------------------------------
+
+
         // ------- zapiujemy wprowadzone dane na liście ----------------------
         values.put(dbHelper.COLUMN_MODEL, model);
         values.put(dbHelper.COLUMN_MAKE,make);
@@ -99,9 +115,8 @@ public class EditPhoneActivity extends AppCompatActivity {
     {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
-
+        //getContentResolver().delete(ContentUris.withAppendedId(Provider.URI_CONTENT,(long)currentPhoneId, null, null));
         database.delete(dbHelper.TABLE_NAME, dbHelper.ID + " = " + currentPhoneId, null); //usuwamy z bazy telefon o podanym id
-
         Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
         startActivity(intent);
     }

@@ -30,6 +30,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         phoneList = (ListView) findViewById(android.R.id.list);
 
         //definniujemy listenet dla kliknięcia na dany element listy
@@ -57,8 +58,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
             {
                 //wyświetlamy pasek akcji z przyciskiem do usuwania wielu elementów
-                MenuInflater inflater = actionMode.getMenuInflater();
-                inflater.inflate(R.menu.toolbar, menu);
+                getMenuInflater().inflate(R.menu.toolbar, menu);
                 return true;
             }
 
