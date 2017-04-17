@@ -84,9 +84,11 @@ public class EditPhoneActivity extends AppCompatActivity
             toast.show();
             return;
         }
+
+        if(!validateURL())
+            return;
+
         //--------------------------------------------------------------------------------------------------
-
-
         // ------- zapiujemy wprowadzone dane na liście ----------------------
         values.put(dbHelper.COLUMN_MODEL, model);
         values.put(dbHelper.COLUMN_MAKE, make);
@@ -107,20 +109,8 @@ public class EditPhoneActivity extends AppCompatActivity
     //metoda otwierająca okno przeglądarki i wyświetla adres strony danego telefonu
     public void openBrowser(View view)
     {
-        // --------- sprawdzamy, czy adres strony jest wprowadzony prawidłowo ----------------------------
-        if(websiteEditText.getText().toString().isEmpty() || websiteEditText.getText().toString() == null)
-        {
-            Toast toast = Toast.makeText(this, "Adres strony nie jest uzupełniony!", Toast.LENGTH_SHORT);
-            toast.show();
+        if(!validateURL())
             return;
-        }
-        else if(!android.util.Patterns.WEB_URL.matcher(websiteEditText.getText().toString()).matches())
-        {
-            Toast toast = Toast.makeText(this, "Adres jest wprowadzony niepoprawnie!", Toast.LENGTH_SHORT);
-            toast.show();
-            return;
-        }
-        //-----------------------------------------------------------------------------------------------
 
         String url = websiteEditText.getText().toString();
         if (!url.startsWith("http://") && !url.startsWith("https://")) //jeśli adres nie zaczyna sie od frazy http:// lub https:// - dodajemy ją na początku
@@ -140,6 +130,27 @@ public class EditPhoneActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
         startActivity(intent);
     }
+
+    public boolean validateURL()
+    {
+        // --------- sprawdzamy, czy adres strony jest wprowadzony prawidłowo ----------------------------
+        if(websiteEditText.getText().toString().isEmpty() || websiteEditText.getText().toString() == null)
+        {
+            Toast toast = Toast.makeText(this, "Adres strony nie jest uzupełniony!", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+        else if(!android.util.Patterns.WEB_URL.matcher(websiteEditText.getText().toString()).matches())
+        {
+            Toast toast = Toast.makeText(this, "Adres jest wprowadzony niepoprawnie!", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+        else
+            return true;
+        //-----------------------------------------------------------------------------------------------
+    }
+
 
 //    public boolean validateURL(String url)
 //    {
