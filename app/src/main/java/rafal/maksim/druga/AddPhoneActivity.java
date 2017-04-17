@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class AddPhoneActivity extends AppCompatActivity
 {
 
@@ -103,7 +106,7 @@ public class AddPhoneActivity extends AppCompatActivity
     {
         String make = ((EditText) findViewById(R.id.makeAddLabel)).getText().toString();
         String model = ((EditText) findViewById(R.id.modelAddLabel)).getText().toString();
-        return "https://www.google.pl/search?&q=" + make + "+" + model;
+        return "https://google.pl/search?&q=" + make + "+" + model;
     }
 
     public void savePhone(View view)
@@ -122,6 +125,23 @@ public class AddPhoneActivity extends AppCompatActivity
         }
         //--------------------------------------------------------------------------------------------------
 
+
+        // --------- sprawdzamy, czy adres strony jest wprowadzony prawidłowo ----------------------------
+        if(websiteEditText.getText().toString().isEmpty() || websiteEditText.getText().toString() == null)
+        {
+            Toast toast = Toast.makeText(this, "Adres strony nie jest uzupełniony!", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        else if(!android.util.Patterns.WEB_URL.matcher(websiteEditText.getText().toString()).matches())
+        {
+            Toast toast = Toast.makeText(this, "Adres jest wprowadzony niepoprawnie!", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        //-----------------------------------------------------------------------------------------------
+
+
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
         ContentValues values = new ContentValues(); //tworzymy listę wartości, które chcemy dodać do bazy
@@ -130,15 +150,17 @@ public class AddPhoneActivity extends AppCompatActivity
         String model = ((EditText) findViewById(R.id.modelAddLabel)).getText().toString();
         String website = ((EditText) findViewById(R.id.websiteAddLabel)).getText().toString();
 
+        //dodajemy do listy wartości, które chcemy zapisać w bazie
         values.put(dbHelper.COLUMN_MODEL, model);
         values.put(dbHelper.COLUMN_MAKE, make);
         values.put(dbHelper.COLUMN_WWW, website);
-        database.insert(dbHelper.TABLE_NAME, null, values);
-        database.close();
+        database.insert(dbHelper.TABLE_NAME, null, values); //zapisujemy w bazie żądane wartości
+        database.close(); //zamykamy połączenie z bazą
 
         Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
         startActivity(intent);
     }
+
 
 
 }

@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class EditPhoneActivity extends AppCompatActivity
 {
 
@@ -104,6 +107,21 @@ public class EditPhoneActivity extends AppCompatActivity
     //metoda otwierająca okno przeglądarki i wyświetla adres strony danego telefonu
     public void openBrowser(View view)
     {
+        // --------- sprawdzamy, czy adres strony jest wprowadzony prawidłowo ----------------------------
+        if(websiteEditText.getText().toString().isEmpty() || websiteEditText.getText().toString() == null)
+        {
+            Toast toast = Toast.makeText(this, "Adres strony nie jest uzupełniony!", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        else if(!android.util.Patterns.WEB_URL.matcher(websiteEditText.getText().toString()).matches())
+        {
+            Toast toast = Toast.makeText(this, "Adres jest wprowadzony niepoprawnie!", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+        //-----------------------------------------------------------------------------------------------
+
         String url = websiteEditText.getText().toString();
         if (!url.startsWith("http://") && !url.startsWith("https://")) //jeśli adres nie zaczyna sie od frazy http:// lub https:// - dodajemy ją na początku
             url = "http://" + url;
@@ -122,4 +140,12 @@ public class EditPhoneActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
         startActivity(intent);
     }
+
+//    public boolean validateURL(String url)
+//    {
+//        String regex = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+//        Pattern pattern = Pattern.compile(regex);
+//        Matcher matcher = pattern.matcher(url);
+//        return matcher.matches();
+//    }
 }
