@@ -1,13 +1,18 @@
-<LinearLayout android:layout_width="match_parent"
+<TableLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TableRow
+        android:background="@drawable/row_background"
+        >
 
     <TextView
         android:id="@+id/makeLabel"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
         android:text="New Text"/>
 
     <TextView
@@ -15,6 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
         android:text="New Text"/>
 
-</LinearLayout>
+    </TableRow>
+</TableLayout>

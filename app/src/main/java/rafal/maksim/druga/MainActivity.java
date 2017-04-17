@@ -2,13 +2,11 @@ package rafal.maksim.druga;
 
 import android.app.ListActivity;
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -20,18 +18,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import java.util.Random;
-
 public class MainActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     SimpleCursorAdapter simpleCursorAdapter;
-
+    ListView phoneList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView phoneList = (ListView)findViewById(android.R.id.list);
+        phoneList = (ListView)findViewById(android.R.id.list);
 
         phoneList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -56,8 +52,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
             {
-                MenuInflater pomka = actionMode.getMenuInflater();
-                pomka.inflate(R.layout.toolbar, menu);
+                MenuInflater inflater = actionMode.getMenuInflater();
+                inflater.inflate(R.menu.toolbar, menu);
                 return true;
             }
 
@@ -70,7 +66,14 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem)
             {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.deletion:
+                        deleteSelected();
+                        return true;
+                }
                 return false;
+
             }
 
             @Override
@@ -109,6 +112,24 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
         database.close();
     }
 
+    private void deleteSelected()
+    {
+        DBHelper dbHelper = new DBHelper(this);
+        SQLiteDatabase database = dbHelper.getWritableDatabase(); //metoda getWritableDatabase zwraca obiekt bazy, którą można edytować
+
+        long selected[] = phoneList.getCheckedItemIds();
+        for(int i = 0 ; i < selected.length;++i)
+        {
+            database.delete(dbHelper.TABLE_NAME, dbHelper.ID + " = " + selected[i], null);
+
+        }
+
+        Intent intent = new Intent(this, MainActivity.class); //wracamy do strony głównej
+        startActivity(intent);
+
+
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String [] projection =
@@ -135,6 +156,24 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
     {
         Intent intent = new Intent(this, AddPhoneActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.addPhone:
+                Intent zamiar = new Intent(MainActivity.this,AddPhoneActivity.class);
+                startActivity(zamiar);
+        }
+        return true;
     }
 
 }
